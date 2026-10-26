@@ -404,9 +404,10 @@ If the header says "API offline", the backend terminal isn't running.
   position colors (QB pink, RB teal, WR blue, TE orange) for position pills. Vercel-style structure: a top
   bar with a league switcher, tabs instead of a sidebar, flat bordered cards, Inter for text and Geist Mono
   for numbers. All tokens live in `frontend/tailwind.config.js`.
-- **Logo and mascot:** "The Fleecer", a masked robber with a wool collar (`BrandMark.tsx`, same art as
-  `public/favicon.svg`), designed to stay readable at 16 px in a browser tab. The larger running-thief mascot
-  (`ThiefMascot.tsx`) appears on placeholder pages and on D/F verdicts. Both are original SVGs.
+- **Logo and mascot:** the football thief, a football in a knit beanie and robber's mask (`BrandMark.tsx`, same
+  art as `public/favicon.svg`), designed to stay readable at 16 px in a browser tab. The mascot
+  (`ThiefMascot.tsx`) reuses the same art, running off with a sack of wool on placeholder pages and D/F
+  verdicts. Both are original SVGs.
 - **Headshots** come from Sleeper's CDN using the Sleeper id in each `player_id`; if a photo is missing the
   avatar falls back to initials.
 - **Chart colors** (pink = you send, deeper mint = you receive) were checked with a color-vision-deficiency
