@@ -1,0 +1,8 @@
+{
+  "source": "sleeper+nflverse",
+  "is_sample": false,
+  "as_of": "2026-10-26T04:09:29+00:00",
+  "season": 2026,
+  "week": 7,
+  "description": "Real NFL players. Rest-of-season projections are Sleeper's weekly projections summed over each team's remaining games (weeks 7-18); schedule and bye weeks from nflverse."
+}
