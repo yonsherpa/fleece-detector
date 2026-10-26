@@ -2,9 +2,16 @@
 
 from __future__ import annotations
 
-from pydantic import BaseModel, Field
+from typing import Annotated
+
+from pydantic import BaseModel, Field, StringConstraints
 
 from app.models.league import Position
+
+# Input limits for request bodies, so a client can't send huge payloads to tie up the server.
+# The largest legal roster is 20 starters + 12 bench = 32 players.
+PlayerId = Annotated[str, StringConstraints(min_length=1, max_length=40)]
+MAX_ROSTER_IDS = 40
 
 
 class PlayerProjection(BaseModel):

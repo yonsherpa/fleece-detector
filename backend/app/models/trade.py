@@ -7,17 +7,21 @@ from typing import Literal
 from pydantic import BaseModel, Field
 
 from app.models.league import LeagueSettings, Position
-from app.models.player import DatasetInfo, PlayerValue
+from app.models.player import MAX_ROSTER_IDS, DatasetInfo, PlayerId, PlayerValue
 
 
 class TradeRequest(BaseModel):
-    team_a_gives: list[str] = Field(min_length=1, max_length=8)
-    team_a_receives: list[str] = Field(min_length=1, max_length=8)
-    team_a_roster: list[str] | None = Field(
-        None, description="Team A's full roster (including players it gives). Enables roster-aware grading."
+    team_a_gives: list[PlayerId] = Field(min_length=1, max_length=8)
+    team_a_receives: list[PlayerId] = Field(min_length=1, max_length=8)
+    team_a_roster: list[PlayerId] | None = Field(
+        None,
+        max_length=MAX_ROSTER_IDS,
+        description="Team A's full roster (including players it gives). Enables roster-aware grading.",
     )
-    team_b_roster: list[str] | None = Field(
-        None, description="Team B's full roster (including players it gives). Enables roster-aware grading."
+    team_b_roster: list[PlayerId] | None = Field(
+        None,
+        max_length=MAX_ROSTER_IDS,
+        description="Team B's full roster (including players it gives). Enables roster-aware grading.",
     )
     league: LeagueSettings = Field(default_factory=LeagueSettings)
 

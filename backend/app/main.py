@@ -10,6 +10,14 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from app.api.routes import router
+from app.api.security import (
+    DEFAULT_RULES,
+    MAX_BODY_BYTES,
+    BodySizeLimitMiddleware,
+    RateLimitMiddleware,
+    RateRule,
+    SecurityHeadersMiddleware,
+)
 from app.config import get_settings
 from app.integrations.espn import EspnError
 from app.services.errors import TradeValidationError, UnknownPlayerError
@@ -24,6 +32,7 @@ def create_app(
     repository: PlayerRepository | None = None,
     trending: TrendingService | None = None,
     espn: EspnLeagueService | None = None,
+    rate_rules: tuple[RateRule, ...] = DEFAULT_RULES,
 ) -> FastAPI:
     settings = get_settings()
 
@@ -39,12 +48,19 @@ def create_app(
         version="0.1.0",
         description="Explainable, roster-aware fantasy football trade evaluation.",
         lifespan=lifespan,
+        debug=False,  # never show tracebacks to clients; unexpected errors return a plain 500
     )
+    # Middleware runs outermost-last-added. Order, outside in: CORS -> security headers -> rate limit
+    # -> body size cap -> app. CORS is outermost so even 429/413 responses are readable by the frontend.
+    app.add_middleware(BodySizeLimitMiddleware, max_bytes=MAX_BODY_BYTES)
+    app.add_middleware(RateLimitMiddleware, rules=rate_rules)
+    app.add_middleware(SecurityHeadersMiddleware)
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=settings.cors_origins,
+        allow_origins=settings.cors_origins,  # only the frontend's own address(es), never "*"
         allow_methods=["GET", "POST"],
-        allow_headers=["*"],
+        allow_headers=["Content-Type"],
+        allow_credentials=False,  # the API uses no cookies or logins
     )
 
     @app.exception_handler(UnknownPlayerError)

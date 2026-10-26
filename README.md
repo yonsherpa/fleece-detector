@@ -25,7 +25,8 @@ explains the result in plain English generated only from the numbers it calculat
 | 5 | Real player data pipeline (Sleeper projections + nflverse schedule) | ✅ Done |
 | 6 | Roster entry, lineup settings, before/after starting lineups | ✅ Done |
 | 6b | Moves tab: sell high, safe to drop, waiver targets, buy targets, live Sleeper trends | ✅ Done |
-| 7 | ESPN league import (public leagues only): settings, rosters, real free agents | ✅ Done, 100 tests passing |
+| 7 | ESPN league import (public leagues only): settings, rosters, real free agents | ✅ Done |
+| — | Security audit: dependency upgrades, rate limiting, input caps, security headers, CSP | ✅ Done, 114 tests passing |
 | 8 | Deployment (Vercel + Render), screenshots, polish | ⏳ |
 
 ---
@@ -382,7 +383,7 @@ You run two servers, each in its own terminal (VS Code: Terminal → New Termina
 cd tradeiq\backend
 python -m venv .venv                  # first time only
 .\.venv\Scripts\Activate.ps1          # if blocked: Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
-pip install -r requirements.txt       # first time only
+pip install -r requirements-dev.txt   # first time only (runtime + test tools)
 uvicorn app.main:app --reload
 ```
 
@@ -438,10 +439,44 @@ error codes and CORS. ESPN integration failure tests arrive with Phase 7.
 
 ## Deployment (planned, Phase 8)
 
-- **Backend → Render** (free web service): build `pip install -r requirements.txt`, start
-  `uvicorn app.main:app --host 0.0.0.0 --port $PORT`, root directory `backend`, env var
-  `FLEECE_CORS_ORIGINS=https://<your-app>.vercel.app`.
+- **Backend → Render** (free web service): root directory `backend`, build `pip install -r requirements.txt`,
+  start `uvicorn app.main:app --host 0.0.0.0 --port $PORT --proxy-headers --forwarded-allow-ips="*"`
+  (never `--reload` in production; `--proxy-headers` makes rate limiting see each visitor's real IP instead
+  of Render's proxy), env var `FLEECE_CORS_ORIGINS=https://<your-app>.vercel.app`.
 - **Frontend → Vercel**: root `frontend`, env var `VITE_API_BASE_URL=https://<your-api>.onrender.com`.
+  Security headers come from `frontend/vercel.json`. Its CSP allows API calls to `https://*.onrender.com`;
+  if the API gets a custom domain, add it to `connect-src` there.
+
+---
+
+## Security
+
+Audited October 2026 with tools, not just a checklist. What applies to this app:
+
+| Area | Status |
+|---|---|
+| Secrets / API keys | None exist: Sleeper and ESPN public data need no keys. `.env` is git-ignored; the only env vars are non-secret (allowed CORS origins, data source path, API URL). Git history scanned for secret patterns: clean. |
+| Logins, passwords, admin routes, user access | **Not applicable by design**: no accounts, no admin endpoints, no database of users. Rosters live only in each visitor's own browser (`localStorage`). The app refuses to handle ESPN login cookies. |
+| Database | None (data is a read-only CSV snapshot). |
+| Input validation | Every request is validated by Pydantic: types, enums, numeric ranges, and size caps on every list and string (`PlayerId` ≤ 40 chars, rosters ≤ 40 ids, ≤ 20 league teams). Request bodies over 64 KB are refused with 413, even when streamed without a Content-Length. |
+| Injection | No SQL, shell commands, `eval`, or user-controlled file paths in the backend. The ESPN URL is built only from an integer league id. |
+| XSS | React escapes all rendered text; the frontend uses no `dangerouslySetInnerHTML`, `innerHTML` or `eval`. A strict Content Security Policy (`frontend/vercel.json`) blocks scripts from anywhere but the site itself. |
+| Rate limiting | Per-IP sliding window (`app/api/security.py`): 10/min for ESPN import, 30/min for Moves (calls Sleeper), 120/min overall. Returns 429 with `Retry-After`. In-memory, so it assumes one server instance. |
+| CORS | Only the configured frontend origin(s); `GET`/`POST`; `Content-Type` header only; no credentials. |
+| Security headers | API: `nosniff`, `X-Frame-Options: DENY`, `Referrer-Policy`, HSTS, `Permissions-Policy`, and `default-src 'none'` CSP (relaxed only for `/docs`). Frontend: CSP, `nosniff`, `DENY`, referrer policy, HSTS, permissions policy. The CSP was tested locally with `npm run preview`, which serves the built site with the same headers. |
+| Debug / error leakage | FastAPI `debug=False`; unexpected errors return a plain 500 with no traceback (tested). No source maps are published. |
+| Dependencies | `pip-audit` and `npm audit`: Starlette/FastAPI upgraded (fixed 8 advisories), React Router 6 → 7 and Vite 5 → 6 (fixed open-redirect and dev-server advisories). Shipped frontend code: 0 known vulnerabilities. Test tools moved to `requirements-dev.txt` so they're not installed in production. |
+
+**Accepted risk:** `npm audit` still reports 3 *moderate* advisories in Tailwind CSS 3's selector parser
+(slow parsing of crafted CSS). It runs only at build time on our own CSS, never on visitor input; the fix
+requires Tailwind 4 (a config rewrite), noted under future improvements.
+
+Re-run the checks anytime:
+
+```powershell
+cd backend; .\.venv\Scripts\python.exe -m pip_audit -r requirements-dev.txt
+cd frontend; npm audit --omit=dev
+```
 
 ---
 
@@ -485,3 +520,6 @@ error codes and CORS. ESPN integration failure tests arrive with Phase 7.
 - Uncertainty: projection ranges and a floor/ceiling view of the trade
 - K and D/ST support; dynasty/keeper value; SQLite-backed trade history
 - Optional LLM rephrasing grounded only in the structured evaluation
+- Upgrade to Tailwind CSS 4 (clears the remaining build-time npm advisory) and React 19
+- Shared rate-limit store (e.g. Redis) if the API ever runs on more than one instance
+- Run `pytest`, `pip-audit` and `npm audit` automatically on every push (GitHub Actions)

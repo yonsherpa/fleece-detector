@@ -7,19 +7,22 @@ from typing import Literal
 from pydantic import BaseModel, Field
 
 from app.models.league import LeagueSettings
-from app.models.player import DatasetInfo, PlayerValue
+from app.models.player import MAX_ROSTER_IDS, DatasetInfo, PlayerId, PlayerValue
 
 
 class LeagueTeamRoster(BaseModel):
-    team_name: str
-    player_ids: list[str]
+    team_name: str = Field(max_length=100)
+    player_ids: list[PlayerId] = Field(max_length=MAX_ROSTER_IDS)
 
 
 class MovesRequest(BaseModel):
-    roster: list[str] | None = Field(None, description="Your roster's player ids. Unlocks roster-specific sections.")
+    roster: list[PlayerId] | None = Field(
+        None, max_length=MAX_ROSTER_IDS, description="Your roster's player ids. Unlocks roster-specific sections."
+    )
     league: LeagueSettings = Field(default_factory=LeagueSettings)
     league_rosters: list[LeagueTeamRoster] | None = Field(
         None,
+        max_length=20,  # same as the largest league size we support
         description="Every team's roster (e.g. from an ESPN import). Makes waiver targets real free agents "
         "and limits buy targets to players other teams own.",
     )
