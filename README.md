@@ -523,3 +523,9 @@ cd frontend; npm audit --omit=dev
 - Upgrade to Tailwind CSS 4 (clears the remaining build-time npm advisory) and React 19
 - Shared rate-limit store (e.g. Redis) if the API ever runs on more than one instance
 - Run `pytest`, `pip-audit` and `npm audit` automatically on every push (GitHub Actions)
+
+---
+
+## License
+
+[MIT](LICENSE). Player projections come from Sleeper's public API and schedules from nflverse; this project is not affiliated with Sleeper, ESPN or the NFL.
