@@ -1,6 +1,7 @@
 import { AlertTriangle, Info } from "lucide-react";
 import { useState, type ReactNode } from "react";
 import { POSITIONS, type LineupSlotAssignment, type TeamImpact, type TradeEvaluation } from "../../types/api";
+import { ThiefMascot } from "../ThiefMascot";
 import { PositionBadge, cx, signed } from "../ui";
 import { PlayerValueChart, PositionDeltaChart, type PositionDelta } from "./charts";
 import { LineupComparison } from "./LineupComparison";
@@ -80,10 +81,14 @@ export function Verdict({ result }: { result: TradeEvaluation }) {
     <div aria-live="polite">
       <div className="flex items-center gap-4 p-4">
         <span className={cx("num text-5xl font-semibold leading-none", gradeTone(result.grade))}>{result.grade}</span>
-        <div className="min-w-0">
+        <div className="min-w-0 flex-1">
           <div className="text-base font-semibold text-ink-100">{v.title}</div>
           <div className="text-ink-400">{v.body}</div>
         </div>
+        {/* You're getting fleeced: the thief makes off with the loot. */}
+        {(result.grade[0] === "D" || result.grade[0] === "F") && (
+          <ThiefMascot size={76} className="shrink-0" />
+        )}
       </div>
 
       <dl className="divide-y divide-ink-700/60 border-t border-ink-700 px-4 text-sm">

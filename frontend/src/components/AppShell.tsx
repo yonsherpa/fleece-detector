@@ -2,6 +2,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import { NavLink } from "react-router-dom";
 import { api } from "../services/api";
 import type { DatasetInfo } from "../types/api";
+import { BrandMark } from "./BrandMark";
 import { LeagueSwitcher } from "./LeagueSwitcher";
 import { cx } from "./ui";
 
@@ -16,18 +17,7 @@ const NAV = [
 function Logo() {
   return (
     <NavLink to="/" className="flex shrink-0 items-center gap-2">
-      {/* Magnifying glass inspecting a tuft of fleece. Same artwork as public/favicon.svg. */}
-      <svg viewBox="0 0 32 32" className="h-6 w-6" aria-hidden>
-        <rect width="32" height="32" rx="7" className="fill-ink-800" />
-        <g fill="#E9EDF5">
-          <circle cx="11.6" cy="15.2" r="2.3" />
-          <circle cx="14" cy="13.2" r="2.7" />
-          <circle cx="16.4" cy="15.2" r="2.3" />
-          <rect x="11.6" y="14.4" width="4.8" height="3.1" />
-        </g>
-        <circle cx="14" cy="14.5" r="7.6" fill="none" stroke="#00CEB8" strokeWidth="2.4" />
-        <path d="M19.6 20.1l5.2 5.2" stroke="#00CEB8" strokeWidth="3" strokeLinecap="round" />
-      </svg>
+      <BrandMark size={26} />
       <span className="hidden text-sm font-semibold tracking-tight text-ink-100 sm:inline">Fleece Detector</span>
     </NavLink>
   );
