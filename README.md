@@ -10,8 +10,7 @@ after the trade, grades the change from A+ to F, and explains the result in plai
 
 ## My story
 
-*Write a few sentences here in your own words: why you built this (a trade in your league?), what you
-learned, and what was hardest. Recruiters read this part most closely.*
+I made this because ESPN Fantasy wasn't grading my trades. I was trying to show my friend that the trade I proposed to him was fair so I built this just to find out that my program said I was fleecing him. The hardest part was aligning the players to their projected data because of the names listed on sleeper and espn. My friend ended up not accepting my trade, but I ended up with a nice project to add to my resume. It's lowk tuff tho and im going to continue to use it to try and justify my trades to my leaguemates who are boring and won't make a single trade.
 
 ## Features
 
