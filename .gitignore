@@ -28,3 +28,6 @@ backend/app/data/cache/
 .idea/
 .DS_Store
 Thumbs.db
+
+# Private interview notes (kept local)
+INTERVIEW_NOTES.md
