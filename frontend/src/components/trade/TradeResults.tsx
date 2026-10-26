@@ -1,10 +1,11 @@
 import { AlertTriangle, Info } from "lucide-react";
-import { useState, type ReactNode } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 import { POSITIONS, type LineupSlotAssignment, type TeamImpact, type TradeEvaluation } from "../../types/api";
 import { ThiefMascot } from "../ThiefMascot";
 import { PositionBadge, cx, signed } from "../ui";
 import { PlayerValueChart, PositionDeltaChart, type PositionDelta } from "./charts";
 import { LineupComparison } from "./LineupComparison";
+import { pickFleeceJoke } from "./fleeceJokes";
 import { alignBySlot } from "./lineupAlign";
 
 function gradeTone(grade: string): string {
@@ -76,6 +77,8 @@ export function Verdict({ result }: { result: TradeEvaluation }) {
   const winner =
     result.winner === "even" ? "Even" : result.winner === "team_a" ? "You (Team A)" : "Team B";
   const changes = slotChanges(a);
+  // A new joke for each evaluation, but stable while the same result is on screen.
+  const joke = useMemo(() => pickFleeceJoke(result.grade), [result]);
 
   return (
     <div aria-live="polite">
@@ -84,6 +87,7 @@ export function Verdict({ result }: { result: TradeEvaluation }) {
         <div className="min-w-0 flex-1">
           <div className="text-base font-semibold text-ink-100">{v.title}</div>
           <div className="text-ink-400">{v.body}</div>
+          {joke && <p className="mt-1.5 text-sm italic text-ink-300">"{joke}"</p>}
         </div>
         {/* You're getting fleeced: the thief makes off with the loot. */}
         {(result.grade[0] === "D" || result.grade[0] === "F") && (

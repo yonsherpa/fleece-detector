@@ -1,21 +1,33 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
   <!-- The football thief. Same artwork as src/components/BrandMark.tsx (keep in sync). -->
   <rect width="32" height="32" rx="7" fill="#151B28"/>
-  <g transform="rotate(-14 16 17)">
-    <defs><clipPath id="ball"><path d="M3 18C6 8 26 8 29 18C26 28 6 28 3 18Z"/></clipPath></defs>
-    <path d="M3 18C6 8 26 8 29 18C26 28 6 28 3 18Z" fill="#8B5A2B"/>
-    <g clip-path="url(#ball)">
-      <rect x="0" y="14" width="32" height="5.4" fill="#0B0E14"/>
-      <path d="M12 23H20" stroke="#F2EAD8" stroke-width="1.3" stroke-linecap="round"/>
-      <path d="M13.8 21.6V24.4M16 21.6V24.4M18.2 21.6V24.4" stroke="#F2EAD8" stroke-width="1" stroke-linecap="round"/>
+  <g transform="translate(2.1 2.3) scale(0.87)">
+    <defs>
+      <clipPath id="ball"><path d="M2 18C5 7.5 27 7.5 30 18C27 28.5 5 28.5 2 18Z" transform="rotate(-35 16 18)"/></clipPath>
+      <clipPath id="hat"><path d="M5.5 15.5C5.5 1.5 28.5 1.5 28.5 15.5Z"/></clipPath>
+    </defs>
+    <g fill="#00CEB8" stroke="#00CEB8" stroke-width="3.2" stroke-linejoin="round">
+      <path d="M2 18C5 7.5 27 7.5 30 18C27 28.5 5 28.5 2 18Z" transform="rotate(-35 16 18)"/>
+      <path d="M5.5 15.5C5.5 1.5 28.5 1.5 28.5 15.5Z" transform="rotate(-10 17 15)"/>
     </g>
-    <path d="M8.6 17Q11.4 14.9 14.3 16.4Q11.5 18.2 8.6 17Z" fill="#F2EAD8"/>
-    <path d="M23.4 17Q20.6 14.9 17.7 16.4Q20.5 18.2 23.4 17Z" fill="#F2EAD8"/>
-    <circle cx="12" cy="16.6" r="0.9" fill="#0B0E14"/>
-    <circle cx="20" cy="16.6" r="0.9" fill="#0B0E14"/>
-    <path d="M3 18C6 8 26 8 29 18C26 28 6 28 3 18Z" fill="none" stroke="#00CEB8" stroke-width="1.5" stroke-linejoin="round"/>
-    <path d="M7.5 13C7.5 3.5 24.5 3.5 24.5 13Z" fill="#3A4357" stroke="#00CEB8" stroke-width="1.5" stroke-linejoin="round"/>
-    <path d="M12 7.6V10.6M16 6.6V10.6M20 7.6V10.6" stroke="#252C3D" stroke-width="1.1"/>
-    <rect x="6.5" y="10.5" width="19" height="3.6" rx="1.6" fill="#55607A" stroke="#00CEB8" stroke-width="1.5" stroke-linejoin="round"/>
+    <path d="M2 18C5 7.5 27 7.5 30 18C27 28.5 5 28.5 2 18Z" transform="rotate(-35 16 18)" fill="#8A4A24"/>
+    <g clip-path="url(#ball)">
+      <path d="M7 9.5Q5.4 18 7 26.5" transform="rotate(-35 16 18)" stroke="#F2EAD8" stroke-width="1.8" fill="none"/>
+      <g transform="rotate(-10 17 15)">
+        <rect x="0" y="15" width="34" height="6" fill="#0B0D12"/>
+        <path d="M11 24.5H18" stroke="#F2EAD8" stroke-width="1.3" stroke-linecap="round"/>
+        <path d="M12.6 23.1V25.9M14.5 23.1V25.9M16.4 23.1V25.9" stroke="#F2EAD8" stroke-width="1" stroke-linecap="round"/>
+      </g>
+    </g>
+    <g transform="rotate(-10 17 15)">
+      <path d="M8.2 17.2L14.6 18.4Q13.9 20.6 11.3 20.5Q8.6 20.3 8.2 17.2Z" fill="#FFFFFF"/>
+      <path d="M26.2 17.2L19.8 18.4Q20.5 20.6 23.1 20.5Q25.8 20.3 26.2 17.2Z" fill="#FFFFFF"/>
+      <circle cx="12" cy="19.2" r="1" fill="#0B0D12"/>
+      <circle cx="22.4" cy="19.2" r="1" fill="#0B0D12"/>
+      <path d="M5.5 15.5C5.5 1.5 28.5 1.5 28.5 15.5Z" fill="#121419"/>
+      <path d="M9 2V12M13 2V12M17 2V12M21 2V12M25 2V12" stroke="#23262E" stroke-width="1.1" clip-path="url(#hat)"/>
+      <rect x="5" y="11.6" width="24" height="3.9" rx="1.6" fill="#1C1F26"/>
+      <path d="M8 12.2V14.9M11 12.2V14.9M14 12.2V14.9M17 12.2V14.9M20 12.2V14.9M23 12.2V14.9M26 12.2V14.9" stroke="#30343F" stroke-width="0.9"/>
+    </g>
   </g>
 </svg>
