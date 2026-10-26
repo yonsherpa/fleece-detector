@@ -9,6 +9,7 @@ export const F_JOKES = [
   "Mike Ditka gave up a whole draft for Ricky Williams and still did better than this.",
   "The Nets' trade for Pierce and Garnett aged better than this.",
   "Broncos fans have seen this before. It was called the Russell Wilson trade.",
+  "Even the refs who missed the Saints-Rams pass interference would flag this one.",
   "Your league chat is already screenshotting this.",
   "The commissioner should veto this for your own protection.",
   "Somewhere a sheep is missing its fleece. It's you.",
